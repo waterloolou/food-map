@@ -1,0 +1,355 @@
+.app-shell {
+  position: relative;
+  height: 100svh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.status-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+  padding: 24px;
+  z-index: 10;
+}
+
+.status-overlay-hint {
+  color: var(--text);
+  opacity: 0.7;
+  font-size: 13px;
+}
+
+.main-layout {
+  display: flex;
+  height: 100%;
+}
+
+.sidebar {
+  width: 340px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--border);
+  padding: 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sidebar-header h1 {
+  font-size: 20px;
+}
+
+.sidebar-subtitle {
+  color: var(--text);
+  opacity: 0.7;
+  font-size: 13px;
+  margin: 0;
+}
+
+.search-bar {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text-h);
+}
+
+.only-traditional-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.dislike-filter {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 10px;
+}
+
+.dislike-filter summary {
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.badge {
+  background: var(--accent);
+  color: var(--accent-contrast);
+  border-radius: 999px;
+  font-size: 11px;
+  padding: 1px 7px;
+}
+
+.dislike-filter-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 12px;
+  margin-top: 8px;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.dislike-filter-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  text-transform: capitalize;
+  cursor: pointer;
+}
+
+.restaurant-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow-y: auto;
+}
+
+.restaurant-list-item {
+  width: 100%;
+  text-align: left;
+  background: var(--muted-bg);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  color: var(--text-h);
+}
+
+.restaurant-list-item.selected {
+  border-color: var(--accent);
+}
+
+.restaurant-list-name {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.restaurant-list-meta {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.empty-state {
+  opacity: 0.7;
+  font-size: 13px;
+}
+
+.map-area {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.map-container {
+  height: 100%;
+  width: 100%;
+}
+
+.place-detail-panel {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 300px;
+  max-height: calc(100% - 32px);
+  overflow-y: auto;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  z-index: 500;
+}
+
+.close-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  border: none;
+  background: none;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--text);
+}
+
+.place-address,
+.place-distance {
+  margin: 0 0 4px;
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+.directions-link {
+  display: inline-block;
+  margin: 8px 0 12px;
+  padding: 6px 12px;
+  background: var(--accent);
+  color: var(--accent-contrast);
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.menu-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.menu-item {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 6px;
+  font-size: 13px;
+}
+
+.menu-item.traditional .menu-item-name {
+  font-weight: 600;
+}
+
+.menu-item.disliked {
+  opacity: 0.45;
+}
+
+.menu-item-name {
+  display: block;
+}
+
+.menu-item-ingredients {
+  display: block;
+  opacity: 0.65;
+  font-size: 12px;
+}
+
+.menu-item-flag {
+  display: block;
+  color: var(--accent);
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+.unsupported-region-banner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 8px;
+  padding: 24px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.location-simulator-dock {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  z-index: 1000;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  max-width: 260px;
+}
+
+.location-simulator summary {
+  cursor: pointer;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.location-simulator-body {
+  padding: 0 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.location-simulator-hint {
+  font-size: 12px;
+  opacity: 0.7;
+  margin: 0;
+}
+
+.location-simulator-cities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.location-simulator-cities button,
+.use-real-location {
+  font-size: 12px;
+  padding: 5px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--muted-bg);
+  color: var(--text-h);
+}
+
+.manual-location-form {
+  display: flex;
+  gap: 6px;
+}
+
+.manual-location-form input {
+  width: 0;
+  flex: 1;
+  padding: 4px 6px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text-h);
+}
+
+.manual-location-form button {
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--muted-bg);
+  color: var(--text-h);
+}
+
+@media (max-width: 720px) {
+  .main-layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    max-height: 45svh;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .map-area {
+    flex: 1;
+    min-height: 0;
+  }
+
+  .place-detail-panel {
+    left: 16px;
+    width: auto;
+  }
+}
