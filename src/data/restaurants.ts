@@ -48,6 +48,7 @@ export const RESTAURANTS: Restaurant[] = [
     menu: [
       { id: 'nl-4-1', name: 'Haring met ui', ingredients: ['herring', 'onion', 'pickle'], price: 5 },
       { id: 'nl-4-2', name: 'Kibbeling', ingredients: ['cod', 'batter', 'mayonnaise'], price: 7 },
+      { id: 'nl-4-3', name: 'Gerookte paling', ingredients: ['smoked eel', 'rye bread', 'butter'], price: 9 },
     ],
   },
 

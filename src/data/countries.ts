@@ -16,6 +16,7 @@ export const COUNTRIES: Country[] = [
       { name: 'poffertjes' },
       { name: 'haring', aliases: ['herring'] },
       { name: 'erwtensoep', aliases: ['pea soup'] },
+      { name: 'paling', aliases: ['gerookte paling', 'smoked eel'] },
     ],
   },
   {
