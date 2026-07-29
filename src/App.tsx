@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import './App.css';
 import { COUNTRIES } from './data/countries';
-import { RESTAURANTS } from './data/restaurants';
+import { getEffectiveRestaurants } from './data/restaurantSource';
 import { useGeolocation } from './hooks/useGeolocation';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { detectCountry } from './lib/countryDetection';
@@ -26,13 +26,14 @@ function App() {
 
   const effectiveLocation = overrideLocation ?? geo.location;
   const detectedCountry = effectiveLocation ? detectCountry(effectiveLocation, COUNTRIES) : null;
+  const allRestaurants = useMemo(() => getEffectiveRestaurants(), []);
 
   const restaurantsForCountry = useMemo(
     () =>
       detectedCountry
-        ? buildRestaurantsForCountry(RESTAURANTS, detectedCountry, dislikedIngredients, effectiveLocation)
+        ? buildRestaurantsForCountry(allRestaurants, detectedCountry, dislikedIngredients, effectiveLocation)
         : [],
-    [detectedCountry, dislikedIngredients, effectiveLocation],
+    [allRestaurants, detectedCountry, dislikedIngredients, effectiveLocation],
   );
 
   const visibleRestaurants = useMemo(
