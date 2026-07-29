@@ -1,0 +1,22 @@
+{
+  "name": "food-map-enrichment",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/cli.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test src/**/*.test.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.115.0",
+    "cheerio": "^1.0.0",
+    "pdf-parse": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.2",
+    "@types/pdf-parse": "^1.1.5",
+    "tsx": "^4.19.0",
+    "typescript": "~6.0.2"
+  }
+}

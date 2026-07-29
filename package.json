@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "enrich": "npm --prefix enrichment run start --"
   },
   "dependencies": {
     "leaflet": "^1.9.4",

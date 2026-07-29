@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Enrichment pipeline scrape/parse cache
+enrichment/.cache/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
