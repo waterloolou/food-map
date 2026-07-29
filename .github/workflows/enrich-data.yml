@@ -1,0 +1,65 @@
+name: Enrich Restaurant Data
+
+on:
+  schedule:
+    - cron: '0 6 * * 1' # weekly, Monday 06:00 UTC
+  workflow_dispatch:
+    inputs:
+      cities:
+        description: 'Comma-separated city names (default: all 4)'
+        required: false
+        default: ''
+      max_per_city:
+        description: 'Max restaurants to process per city'
+        required: false
+        default: '15'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: enrich-data
+  cancel-in-progress: false
+
+jobs:
+  enrich:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: enrichment/package-lock.json
+
+      - name: Install enrichment dependencies
+        working-directory: enrichment
+        run: npm ci
+
+      - name: Run enrichment pipeline
+        working-directory: enrichment
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          ARGS=""
+          if [ -n "${{ github.event.inputs.cities }}" ]; then
+            ARGS="$ARGS --cities ${{ github.event.inputs.cities }}"
+          fi
+          MAX_PER_CITY="${{ github.event.inputs.max_per_city }}"
+          ARGS="$ARGS --max-per-city ${MAX_PER_CITY:-15}"
+          npm run start -- $ARGS
+
+      - name: Commit and push if changed
+        run: |
+          if git diff --quiet -- src/data/restaurants.generated.json; then
+            echo "No changes to restaurants.generated.json"
+            exit 0
+          fi
+          git config user.name "food-map-enrichment-bot"
+          git config user.email "actions@github.com"
+          git add src/data/restaurants.generated.json
+          git commit -m "Update AI-enriched restaurant data"
+          git push

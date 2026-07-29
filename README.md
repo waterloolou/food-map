@@ -62,5 +62,55 @@ type in a manual latitude/longitude.
 - Country detection uses simple bounding boxes scoped to the four seeded
   cities, not real country borders — see `src/data/countries.ts`.
 - Restaurant data is hand-written mock data in `src/data/restaurants.ts`.
-  A real places API could replace it later without touching the matching
-  or filtering logic.
+  A separate AI enrichment pipeline (see below) can supplement or replace
+  it per city without touching the matching or filtering logic.
+
+## AI menu-enrichment pipeline
+
+`enrichment/` is a standalone Node CLI (own `package.json`, not part of
+the browser bundle) that grows the restaurant database with **real**
+restaurants and **real** menus, rather than hand-writing more mock data:
+
+1. **Discover** real restaurants with a website in each supported city via
+   the free OpenStreetMap Overpass API (`enrichment/src/discover/`).
+2. **Scrape** each restaurant's own website — homepage, linked menu pages,
+   and linked PDF menus (`enrichment/src/scrape/`). Every failure mode
+   (bot-blocked, dead link, no menu found, robots.txt disallow) is handled
+   as a skip, never a crash.
+3. **Parse** the scraped text into structured `{ name, ingredients, price? }`
+   menu items using Claude (`enrichment/src/parse/`), via forced tool-use
+   so the output always matches the app's `MenuItem` shape. The AI's job
+   is extraction only — deciding which dishes are "traditional" and
+   applying the dislike filter both stay in the existing, tested
+   `src/lib/matching.ts` / `src/lib/filtering.ts`.
+4. **Write** the result to `src/data/restaurants.generated.json`. The app's
+   `src/data/restaurantSource.ts` prefers this generated data for a city
+   once it clears a minimum restaurant count, and otherwise falls back to
+   the hand-written mock data for that city — so a low-yield city (few
+   scrapable websites, bot-blocked sites, JS-only menus) never regresses
+   below the working demo.
+
+**Known coverage limits:** not every real restaurant has a website listed
+in OpenStreetMap; scraping uses plain HTTP fetches (no headless browser),
+so JS-rendered menus won't be picked up; some sites block scrapers or have
+no discoverable menu text at all. Expect a meaningful fraction of
+discovered restaurants to be skipped — this is expected and handled, not
+a bug.
+
+**Running it:**
+
+```bash
+# From the repo root
+npm run enrich -- --cities Amsterdam --max-per-city 5 --dry-run   # discovery + scrape only, no LLM calls, no writes
+npm run enrich -- --cities Amsterdam --max-per-city 5             # real run for one city
+npm run enrich                                                     # all 4 cities, default cap
+```
+
+Requires `ANTHROPIC_API_KEY` in the environment for real (non-dry-run)
+runs. A scheduled GitHub Actions workflow
+(`.github/workflows/enrich-data.yml`) runs this weekly and commits
+`restaurants.generated.json` back to `main` only when it actually changes
+— that push then triggers the existing Pages deploy automatically. The
+workflow needs an `ANTHROPIC_API_KEY` repository secret; it can also be
+triggered manually via `workflow_dispatch` with `cities`/`max_per_city`
+inputs.
