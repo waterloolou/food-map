@@ -1,66 +1,35 @@
-# food-map
+# Food Map
 
-A map that shows you where to find traditional local cuisine wherever you
-are. It detects your location, figures out which country/city you're in,
-and highlights restaurants whose menus include traditional dishes from that
-place — while letting you filter out dishes containing ingredients you
-don't like.
+Find somewhere good to eat near you: pick the kind of food, say how far you'll drive, and Food Map shows the restaurants on a map. Places rated **2 stars or less are crossed off** automatically.
+
+## ▶ [Open Food Map](https://waterloolou.github.io/food-map/)
 
 ## What it does
+- **Type of food:** BBQ, Chinese, Mexican, Italian, Pizza, Japanese, Thai, Indian and more. Pick several at once, or "Any food".
+- **How far you'll drive:** 2, 5, 10 or 20 miles, or type your own (up to 30). It shows a rough drive time and draws the area on the map.
+- **Crossed off:** restaurants rated 2 stars or less get a red line through them and sink to the bottom. Tick "Hide 2 stars and below" to remove them.
+- **Open now** and **Best rated / Closest** sorting.
+- **Anywhere:** uses your location, or search a city, ZIP code or address.
+- **Directions** and a link to the place's Google reviews and photos.
 
-- **Location-aware:** uses your browser's geolocation to detect which
-  supported city you're in.
-- **Traditional-dish matching:** each supported country has a list of
-  traditional dishes; restaurant menus are matched against that list so you
-  can see at a glance which places actually serve the local classics (not
-  just restaurants tagged with a cuisine).
-- **Dislike filter:** pick ingredients you don't want (stored locally in
-  your browser, no account needed) and matching dishes are hidden/greyed
-  out — restaurants left with nothing to recommend drop off the map.
-- **Map browsing:** interactive pins, search, a place detail view with
-  distance and matched dishes, and a "Get directions" link out to Google
-  Maps.
+## Live data vs. demo mode
+Restaurants, ratings and opening hours come from **Google Places**, which needs a Google Maps Platform API key. Without a key, Food Map runs in **demo mode**: sample restaurants in Amsterdam, Brussels, Paris and London, with no ratings. Demo mode keeps the original features: traditional local dishes and a "foods I don't like" filter that hides dishes containing those ingredients.
 
-This MVP ships with seed data for four cities: **Amsterdam, Brussels,
-Paris, and London**. It runs entirely in the browser — no backend, no API
-keys.
+### Setting up a key
+1. In [Google Cloud Console](https://console.cloud.google.com/), create a project, turn on billing, and enable **Maps JavaScript API** and **Places API (New)**.
+2. Create an API key. Under *Application restrictions*, choose **Websites** and add `https://waterloolou.github.io/*` (and `http://localhost:5173/*` for local work). Under *API restrictions*, allow only those two APIs.
+3. Either:
+   - **For everyone:** add it as a repository secret named `GOOGLE_MAPS_API_KEY` (Settings → Secrets and variables → Actions) and re-run the deploy workflow; or
+   - **Just for you:** open the site, click the gear, paste the key. It's saved in your browser only.
 
-## Getting started
+A browser key is visible to anyone who opens the page; the website restriction in step 2 is what stops others from using it. Google gives a free monthly allowance; check current [Maps Platform pricing](https://mapsplatform.google.com/pricing/).
 
+## Run it locally
 ```bash
 npm install
-npm run dev
+npm run dev     # http://localhost:5173/food-map/
+npm test        # filtering, distance, cross-off and cuisine tests
 ```
+Put `VITE_GOOGLE_MAPS_API_KEY=your-key` in a `.env.local` file to use live data locally.
 
-Open the printed local URL in a browser. If your browser can't get a real
-GPS fix (e.g. running in a sandbox, or you're just not in one of the
-supported cities), use the **"Simulate location"** control in the
-bottom-left corner to jump to Amsterdam, Brussels, Paris, or London, or
-type in a manual latitude/longitude.
-
-## Scripts
-
-- `npm run dev` — start the dev server
-- `npm run build` — type-check and build for production
-- `npm run test` — run the unit tests (country detection, dish matching,
-  ingredient filtering)
-- `npm run lint` — lint the codebase
-
-## Project structure
-
-- `src/types` — shared TypeScript types
-- `src/data` — seed data: country bounding boxes + traditional dishes,
-  mock restaurants and menus
-- `src/lib` — pure logic: country detection, traditional-dish matching,
-  ingredient/search filtering, distance calculation
-- `src/hooks` — `useGeolocation`, `useLocalStorage`
-- `src/components` — map view, sidebar (search/filter/list), place detail
-  panel, unsupported-region banner, location simulator
-
-## Notes
-
-- Country detection uses simple bounding boxes scoped to the four seeded
-  cities, not real country borders — see `src/data/countries.ts`.
-- Restaurant data is hand-written mock data in `src/data/restaurants.ts`.
-  A real places API could replace it later without touching the matching
-  or filtering logic.
+Built with React, TypeScript, Vite and Leaflet (map tiles © OpenStreetMap contributors).

@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - claude/cuisine-map-location-filter-mqabcc
   workflow_dispatch:
 
 permissions:
@@ -32,8 +31,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Test
+        run: npm test
+
       - name: Build
         run: npm run build
+        env:
+          # Optional. Add a repository secret named GOOGLE_MAPS_API_KEY to give every
+          # visitor live restaurants and ratings; without it the site runs in demo mode.
+          VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
 
       - name: Configure Pages
         uses: actions/configure-pages@v5

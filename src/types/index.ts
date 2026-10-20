@@ -37,6 +37,7 @@ export interface Restaurant {
   location: LatLng;
   address: string;
   countryId: string;
+  cuisines: string[];
   menu: MenuItem[];
 }
 
@@ -50,4 +51,30 @@ export interface RestaurantWithMatches extends Restaurant {
   traditionalCount: number;
   visibleTraditionalCount: number;
   distanceKm: number | null;
+}
+
+/** Where a place's data came from: Google Places (live) or the built-in demo cities. */
+export type PlaceSource = 'google' | 'demo';
+
+/** One restaurant, from either source, in the shape the UI works with. */
+export interface Place {
+  id: string;
+  name: string;
+  location: LatLng;
+  address: string;
+  cuisines: string[]; // ids from data/cuisines.ts
+  rating: number | null; // 1-5 stars, null when there is no rating
+  ratingCount: number | null;
+  priceLevel: number | null; // 1 ($) to 4 ($$$$)
+  openNow: boolean | null;
+  mapsUrl: string | null;
+  source: PlaceSource;
+  /** Demo places only: the menu, matched against traditional dishes and dislikes. */
+  demo?: RestaurantWithMatches;
+}
+
+export interface PlaceWithDistance extends Place {
+  distanceMiles: number;
+  driveMinutes: number;
+  crossedOff: boolean;
 }

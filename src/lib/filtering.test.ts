@@ -10,6 +10,7 @@ const restaurant: Restaurant = {
   location: { lat: 52.37, lng: 4.9 },
   address: 'Somewhere 1',
   countryId: 'NL',
+  cuisines: ['cafe'],
   menu: [
     { id: 'm1', name: 'Stamppot met worst', ingredients: ['potato', 'kale', 'sausage'] },
     { id: 'm2', name: 'Kroket', ingredients: ['beef', 'breadcrumbs'] },
