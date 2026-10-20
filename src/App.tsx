@@ -65,6 +65,7 @@ function App() {
       {isLocating && (
         <div className="status-overlay">
           <p>Finding your location…</p>
+          <p className="status-overlay-hint">Not in Amsterdam, Brussels, Paris or London? Use "Simulate location" below.</p>
         </div>
       )}
 
